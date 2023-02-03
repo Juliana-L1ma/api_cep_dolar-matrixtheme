@@ -29,7 +29,7 @@
 
                       <div class="form-row">
                         <div class="form-group col-md-5">
-                            <input type="text" class="form-control" id="cep" autocomplete="off" placeholder="CEP" maxlength="8" data-autotab/>
+                            <input type="text" class="form-control" id="cep" autocomplete="off" placeholder="CEP" maxlength="8" onkeyup="autoTab('cep', '8', 'numero')">
                         </div>
 
                         <div class="form-group col-md-5">
@@ -91,13 +91,62 @@
     </div>  
 </footer> 
     
-<script src="./script.js"></script>
+<!-- <script src="./script.js"></script> -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 
 <script>
     
+
+//JavaScript do CEP
+
+//autopreenchimento
+function autoTab (fieldset1, len, fieldset2){
+    if(document.getElementById(fieldset1).value.length == len){
+ //preencher os inputs com arrow functions
+ const preencherFormulario = (endereco) => {
+    document.getElementById("rua").value = endereco.logradouro;
+    document.getElementById("cidade").value = endereco.localidade;
+    document.getElementById("estado").value = endereco.uf;
+    }
+
+const cepValido = (cep) => {
+    if (cep.length = 8) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//buscar API
+//Com async e await podemos trabalhar com código assíncrono em um estilo mais parecido com o bom e velho código síncrono.
+const pesquisarCep = async () => {
+    const cep = document.getElementById("cep").value;
+    const url = `http://viacep.com.br/ws/${cep}/json/`;
+    if (cepValido(cep)) {
+        const dados = await fetch(url);
+        const endereco = await dados.json();
+            preencherFormulario(endereco);
+        }
+}
+document.getElementById("cep").addEventListener("focusout", pesquisarCep);
+document.getElementById(fieldset2).focus();
+
+    }
+}
+
+
+   
+
+
+
+
+/*------------------------------------------------------------------------------------*/
+
+
+
+
 
 
 
